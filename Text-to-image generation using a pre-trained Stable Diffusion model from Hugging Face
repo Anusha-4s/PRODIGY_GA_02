@@ -1,0 +1,33 @@
+#"This Colab notebook demonstrates text-to-image generation using a pre-trained Stable Diffusion model from Hugging Face. It utilizes the diffusers and transformers libraries for loading and running the model."
+
+->Install necessary libraries and import the libraries
+->Load the pre-trained model
+->Define the text prompt
+->Generate the image
+->Display the image
+
+#diffusers is a hugging face page for using diffusion models from huggingface hub
+!pip install diffusers transformers gradio accelerate
+# Import the StableDiffusionPipeline class for generating images using Stable Diffusion
+from diffusers import StableDiffusionPipeline
+# Import Matplotlib for displaying images
+import matplotlib.pyplot as plt
+# Import PyTorch for GPU acceleration and tensor operations
+import torch
+
+model_id1 = "runwayml/stable-diffusion-v1-5"                # A general-purpose Stable Diffusion model
+model_id2 = "stabilityai/stable-diffusion-xl-base-1.0"      # A newer version offering higher fidelity
+
+#Load the Stable Diffusion pipeline with the specified model 
+pipe = StableDiffusionPipeline.from_pretrained(model_id1, torch_dtype=torch.float16, use_safetensors=True)
+pipe = pipe.to("cuda")     # Move the pipeline to the GPU for faster image generation
+prompt = """ Dystopian city"""
+image = pipe(prompt).images[0]
+print("[PROMPT]: ",prompt)
+plt.imshow(image);      # Show the image in an interactive environment
+plt.axis('off');        # Remove axis labels for a clean visualization
+prompt2 = """Garden"""
+image = pipe(prompt2).images[0]
+print('[PROMPT]: ',prompt2)
+plt.imshow(image);
+plt.axis('off');
